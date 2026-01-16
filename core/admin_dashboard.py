@@ -8,6 +8,7 @@ import webbrowser
 from urllib.parse import quote
 import time
 from core import db
+from core.ui_helpers import render_lottie
 
 def admin_dashboard():
     st.markdown(
@@ -22,6 +23,33 @@ def admin_dashboard():
         unsafe_allow_html=True,
     )
     st.header("Admin Dashboard")
+
+    col1, col2 = st.columns([3, 1], gap="large")
+    with col1:
+        st.markdown(
+            """
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="card-icon">💼</div>
+                    <div class="card-title">Funds</div>
+                    <p class="card-desc">Create and manage recurring funds with clear schedules.</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">👥</div>
+                    <div class="card-title">Members</div>
+                    <p class="card-desc">Enroll, verify, and keep member records in sync.</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Reports</div>
+                    <p class="card-desc">Track collections, trends, and outstanding dues instantly.</p>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with col2:
+        render_lottie("https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json", height=260, key="admin-dashboard-lottie")
 
     all_logs_df = db.get_all_payment_logs()
 
