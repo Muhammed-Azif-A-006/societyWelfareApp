@@ -9,19 +9,20 @@ def apply_global_style():
         """
         <style>
         :root {
-            --primary: #4f46e5;
-            --primary-dark: #312e81;
-            --accent: #14b8a6;
-            --text: #0f172a;
-            --muted: #64748b;
+            --primary: #1d4ed8;
+            --primary-dark: #1e3a8a;
+            --accent: #0f766e;
+            --text: #0b1220;
+            --muted: #475569;
             --card: #ffffff;
-            --border: #e2e8f0;
-            --surface: #f8fafc;
-            --sidebar: #111827;
+            --border: #dbe2ea;
+            --surface: #f1f5f9;
+            --sidebar: #0f172a;
+            --highlight: #e0f2fe;
         }
 
         .stApp {
-            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #ecfeff 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 40%, #e0f2fe 100%);
             color: var(--text);
         }
 
@@ -42,6 +43,10 @@ def apply_global_style():
             color: #f1f5f9;
         }
 
+        [data-testid="stSidebar"] a {
+            color: #93c5fd;
+        }
+
         div[data-testid="stForm"] {
             background: var(--card);
             border: 1px solid var(--border);
@@ -51,8 +56,8 @@ def apply_global_style():
         }
 
         .hero-card {
-            background: linear-gradient(120deg, rgba(79, 70, 229, 0.12), rgba(20, 184, 166, 0.12));
-            border: 1px solid rgba(148, 163, 184, 0.45);
+            background: linear-gradient(120deg, rgba(29, 78, 216, 0.12), rgba(14, 116, 144, 0.12));
+            border: 1px solid rgba(148, 163, 184, 0.6);
             border-radius: 20px;
             padding: 2rem;
             margin-bottom: 1.5rem;
@@ -60,7 +65,7 @@ def apply_global_style():
 
         .hero-card h1 {
             margin-bottom: 0.4rem;
-            color: #1e1b4b;
+            color: #0f172a;
         }
 
         .hero-card p {
@@ -71,31 +76,31 @@ def apply_global_style():
             display: inline-block;
             padding: 0.4rem 0.75rem;
             border-radius: 999px;
-            background: rgba(79, 70, 229, 0.12);
-            color: #4338ca;
+            background: rgba(29, 78, 216, 0.12);
+            color: #1d4ed8;
             font-weight: 600;
             font-size: 0.85rem;
             margin-right: 0.5rem;
         }
 
         .stButton > button {
-            background: linear-gradient(90deg, #4f46e5, #4338ca);
+            background: linear-gradient(90deg, #1d4ed8, #2563eb);
             color: #ffffff;
             border-radius: 12px;
             border: none;
             padding: 0.6rem 1.3rem;
             font-weight: 600;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 12px 24px rgba(79, 70, 229, 0.25);
+            box-shadow: 0 12px 24px rgba(29, 78, 216, 0.25);
         }
 
         .stButton > button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 16px 32px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 16px 32px rgba(29, 78, 216, 0.3);
         }
 
         .stButton > button:focus {
-            outline: 2px solid #a5b4fc;
+            outline: 2px solid #93c5fd;
             outline-offset: 2px;
         }
 
@@ -112,9 +117,9 @@ def apply_global_style():
         }
 
         .stTabs [data-baseweb="tab"][aria-selected="true"] {
-            background: #4338ca;
+            background: #1d4ed8;
             color: #ffffff;
-            border-color: #4338ca;
+            border-color: #1d4ed8;
         }
 
         div[data-testid="stMetric"] {
@@ -130,7 +135,7 @@ def apply_global_style():
         }
 
         div[data-testid="stMetric"] div {
-            color: #1e1b4b;
+            color: #0f172a;
         }
 
         [data-testid="stTextInput"] input,
@@ -138,12 +143,25 @@ def apply_global_style():
         [data-testid="stSelectbox"] div {
             background: var(--surface);
             border-radius: 10px;
+            color: var(--text);
         }
 
         [data-testid="stTextInput"] input:focus,
         [data-testid="stNumberInput"] input:focus {
-            border-color: #a5b4fc;
-            box-shadow: 0 0 0 2px rgba(165, 180, 252, 0.4);
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.4);
+        }
+
+        label, .stMarkdown, .stMarkdown p, .stTextInput label, .stSelectbox label {
+            color: var(--text);
+        }
+
+        .stAlert > div {
+            border-radius: 12px;
+        }
+
+        .stAlert [data-testid="stMarkdownContainer"] {
+            color: var(--text);
         }
         </style>
         """,
