@@ -24,6 +24,8 @@ def apply_global_style():
         .stApp {
             background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 40%, #e0f2fe 100%);
             color: var(--text);
+            background-size: 200% 200%;
+            animation: backgroundShift 18s ease-in-out infinite;
         }
 
         .stApp header, .stApp footer {
@@ -53,6 +55,7 @@ def apply_global_style():
             border-radius: 18px;
             padding: 1.75rem 2rem;
             box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+            animation: fadeInUp 0.6s ease both;
         }
 
         .hero-card {
@@ -61,6 +64,36 @@ def apply_global_style():
             border-radius: 20px;
             padding: 2rem;
             margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.7s ease both;
+        }
+
+        .hero-card::before,
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            opacity: 0.6;
+            filter: blur(0px);
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+
+        .hero-card::before {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.25), rgba(37, 99, 235, 0));
+            top: -60px;
+            right: -40px;
+        }
+
+        .hero-card::after {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(14, 116, 144, 0.25), rgba(14, 116, 144, 0));
+            bottom: -90px;
+            left: -60px;
+            animation-delay: 1.4s;
         }
 
         .hero-card h1 {
@@ -81,10 +114,11 @@ def apply_global_style():
             font-weight: 600;
             font-size: 0.85rem;
             margin-right: 0.5rem;
+            animation: pillGlow 2.8s ease-in-out infinite;
         }
 
         .stButton > button {
-            background: linear-gradient(90deg, #1d4ed8, #2563eb);
+            background: linear-gradient(90deg, #1d4ed8, #1e40af);
             color: #ffffff;
             border-radius: 12px;
             border: none;
@@ -96,7 +130,7 @@ def apply_global_style():
 
         .stButton > button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 16px 32px rgba(29, 78, 216, 0.3);
+            box-shadow: 0 16px 32px rgba(29, 78, 216, 0.35);
         }
 
         .stButton > button:focus {
@@ -138,6 +172,26 @@ def apply_global_style():
             color: #0f172a;
         }
 
+        button[data-testid="stSidebarCollapseButton"] {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+            color: #e2e8f0;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        button[data-testid="stSidebarCollapseButton"]:hover {
+            background: rgba(147, 197, 253, 0.3);
+            transform: translateY(-1px);
+        }
+
+        h1, h2, h3, h4 {
+            color: #0f172a;
+        }
+
+        .stMarkdown small, .stCaption {
+            color: var(--muted);
+        }
+
         [data-testid="stTextInput"] input,
         [data-testid="stNumberInput"] input,
         [data-testid="stSelectbox"] div {
@@ -162,6 +216,47 @@ def apply_global_style():
 
         .stAlert [data-testid="stMarkdownContainer"] {
             color: var(--text);
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatOrb {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(12px);
+            }
+        }
+
+        @keyframes pillGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 0 rgba(29, 78, 216, 0.2);
+            }
+            50% {
+                box-shadow: 0 8px 18px rgba(29, 78, 216, 0.25);
+            }
+        }
+
+        @keyframes backgroundShift {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
         }
         </style>
         """,
