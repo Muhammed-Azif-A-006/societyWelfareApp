@@ -12,5 +12,4 @@ def render_lottie(url: str, height: int = 220, key: str | None = None) -> None:
         </div>
         """,
         height=height,
-        key=key,
     )
