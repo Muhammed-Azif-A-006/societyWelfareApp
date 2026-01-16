@@ -5,6 +5,7 @@ from io import BytesIO
 import time
 from core import db
 from config import SOCIETY_VPA, SOCIETY_NAME
+from core.ui_helpers import render_lottie
 
 def member_dashboard():
     st.markdown(
@@ -20,6 +21,33 @@ def member_dashboard():
     )
     st.header("Member Dashboard")
     user_id = st.session_state['user_id']
+
+    col1, col2 = st.columns([3, 1], gap="large")
+    with col1:
+        st.markdown(
+            """
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="card-icon">💳</div>
+                    <div class="card-title">My Funds</div>
+                    <p class="card-desc">Check due dates and stay on top of contributions.</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">🧾</div>
+                    <div class="card-title">Receipts</div>
+                    <p class="card-desc">Keep proof of payments and transaction IDs.</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">📬</div>
+                    <div class="card-title">Updates</div>
+                    <p class="card-desc">Get notified when payments are verified.</p>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with col2:
+        render_lottie("https://assets4.lottiefiles.com/packages/lf20_4kx2q32n.json", height=240, key="member-dashboard-lottie")
     
     dues_df = db.get_member_dues(user_id)
 
@@ -81,16 +109,20 @@ def member_dashboard():
                             if submitted and transaction_id:
                                 clean_txn_id = transaction_id.strip()
                                 if not (clean_txn_id.isdigit() and len(clean_txn_id) == 12):
+                                    st.toast("Transaction ID must be a 12-digit number.", icon="⚠️")
                                     st.error("Invalid Transaction ID. Please enter a 12-digit number.")
                                 elif db.is_transaction_id_verified(clean_txn_id):
+                                    st.toast("This transaction ID was already verified.", icon="⚠️")
                                     st.error("This transaction ID has already been used and verified. Please use a different one.")
                                 else:
                                     success, error_message = db.submit_transaction_for_verification(selected_log_id, clean_txn_id)
                                     if success:
+                                        st.toast("Transaction ID submitted for verification.", icon="✅")
                                         st.success("Transaction ID submitted. An admin will verify it shortly.")
                                         time.sleep(2)
                                         st.rerun()
                                     else:
+                                        st.toast("Submission failed. Please try again.", icon="❌")
                                         st.error(f"An error occurred: {error_message}")
     with tab2:
         st.subheader("Completed and Pending Payments")

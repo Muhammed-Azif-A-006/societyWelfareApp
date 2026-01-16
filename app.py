@@ -3,6 +3,15 @@ import time
 from core import auth, db
 from core.admin_dashboard import admin_dashboard
 from core.member_dashboard import member_dashboard
+from core.ui_helpers import render_lottie
+
+def queue_toast(message: str, icon: str = "✨") -> None:
+    st.session_state["toast_payload"] = {"message": message, "icon": icon}
+
+def show_queued_toast() -> None:
+    toast_payload = st.session_state.pop("toast_payload", None)
+    if toast_payload:
+        st.toast(toast_payload["message"], icon=toast_payload["icon"])
 
 def apply_global_style():
     st.markdown(
@@ -128,9 +137,15 @@ def apply_global_style():
             box-shadow: 0 12px 24px rgba(29, 78, 216, 0.25);
         }
 
+        div[data-testid="stForm"] button,
+        .stButton > button {
+            opacity: 1 !important;
+        }
+
+        div[data-testid="stForm"] button:hover,
         .stButton > button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 16px 32px rgba(29, 78, 216, 0.35);
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 18px 34px rgba(29, 78, 216, 0.4), 0 0 18px rgba(59, 130, 246, 0.35);
         }
 
         .stButton > button:focus {
@@ -218,6 +233,80 @@ def apply_global_style():
             color: var(--text);
         }
 
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0 1.8rem;
+        }
+
+        .dashboard-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1.3rem 1.4rem;
+            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: fadeInUp 0.7s ease both;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px rgba(15, 23, 42, 0.14);
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, rgba(29, 78, 216, 0.2), rgba(14, 116, 144, 0.2));
+            color: #1d4ed8;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.35rem;
+        }
+
+        .card-desc {
+            color: var(--muted);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .lottie-wrapper {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 1.5rem;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -264,17 +353,21 @@ def apply_global_style():
     )
 
 def login_page():
-    st.markdown(
-        """
-        <div class="hero-card">
-            <span class="info-pill">Secure Access</span>
-            <span class="info-pill">Member & Admin</span>
-            <h1>Society Welfare Fund Management System</h1>
-            <p>Track contributions, manage funds, and keep your community finances organized.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    col1, col2 = st.columns([2, 1], gap="large")
+    with col1:
+        st.markdown(
+            """
+            <div class="hero-card">
+                <span class="info-pill">Secure Access</span>
+                <span class="info-pill">Member & Admin</span>
+                <h1>Society Welfare Fund Management System</h1>
+                <p>Track contributions, manage funds, and keep your community finances organized.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with col2:
+        render_lottie("https://assets7.lottiefiles.com/packages/lf20_0yfsb3a1.json", height=240, key="login-lottie")
     st.header("Login")
 
     with st.form("login_form"):
@@ -285,6 +378,7 @@ def login_page():
         if login_button:
             user = auth.check_login(phone_number, password)
             if user:
+                queue_toast("Welcome back! Redirecting to your dashboard.", icon="✅")
                 st.session_state['logged_in'] = True
                 st.session_state['user_id'] = user['User_ID']
                 st.session_state['username'] = user['Username']
@@ -292,6 +386,7 @@ def login_page():
                 st.session_state['page'] = 'dashboard'
                 st.rerun()
             else:
+                st.toast("Login failed. Please check your credentials.", icon="⚠️")
                 st.error("Invalid phone number or password.")
 
     if st.button("Create new account"):
@@ -323,13 +418,16 @@ def registration_page():
             if new_username and new_password and phone_number:
                 success, message = auth.create_user(new_username, new_password, role, phone_number, email)
                 if success:
+                    queue_toast("Account created successfully. Please log in to continue.", icon="🎉")
                     st.success("Account created successfully! Please log in.")
                     time.sleep(2)
                     st.session_state['page'] = 'login'
                     st.rerun()
                 else:
+                    st.toast("Registration failed. Please review the details.", icon="❌")
                     st.error(message)
             else:
+                st.toast("Please fill out all required fields.", icon="ℹ️")
                 st.warning("Please fill out all fields.")
 
     if st.button("Back to Login"):
@@ -340,6 +438,17 @@ def main():
     """Main function to run the Streamlit app."""
     st.set_page_config(page_title="Welfare Fund Management", layout="wide")
     apply_global_style()
+
+    if "reduce_motion" not in st.session_state:
+        st.session_state["reduce_motion"] = False
+    with st.sidebar:
+        st.markdown("### Preferences")
+        st.session_state["reduce_motion"] = st.toggle(
+            "Reduce motion",
+            value=st.session_state["reduce_motion"],
+            help="Turn off animations for a calmer experience.",
+        )
+    show_queued_toast()
     
     db.setup_database()
 
