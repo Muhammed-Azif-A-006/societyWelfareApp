@@ -36,12 +36,13 @@ def registration_page():
         new_username = st.text_input("Username (this will be your display name)").lower()
         phone_number = st.text_input("Phone Number (this will be your User ID for login)").lower()
         new_password = st.text_input("Choose a Password", type="password")
+        email = st.text_input("Email (Optional)").lower()
         role = st.selectbox("Select Role", ["Member", "Admin"])
         register_button = st.form_submit_button("Register")
 
         if register_button:
             if new_username and new_password and phone_number:
-                success, message = auth.create_user(new_username, new_password, role, phone_number)
+                success, message = auth.create_user(new_username, new_password, role, phone_number, email)
                 if success:
                     st.success("Account created successfully! Please log in.")
                     time.sleep(2)
