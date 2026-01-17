@@ -215,7 +215,8 @@ def apply_global_style():
 
         [data-testid="stTextInput"] input,
         [data-testid="stNumberInput"] input,
-        [data-testid="stSelectbox"] div {
+        [data-testid="stSelectbox"] div,
+        [data-testid="stTextArea"] textarea {
             background: var(--surface);
             border-radius: 10px;
             color: var(--text);
@@ -227,8 +228,27 @@ def apply_global_style():
             box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.4);
         }
 
-        label, .stMarkdown, .stMarkdown p, .stTextInput label, .stSelectbox label {
+        [data-testid="stTextArea"] textarea {
+            background: #ffffff;
+            border: 1px solid #000000;
+            color: #0b1220;
+        }
+
+        [data-testid="stTextArea"] textarea:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+        }
+
+        label, .stMarkdown, .stMarkdown p, .stTextInput label, .stSelectbox label, [data-testid="stTextArea"] label {
             color: var(--text);
+        }
+
+        [data-testid="stCheckbox"] label {
+            color: #000000;
+        }
+
+        [data-testid="stCheckbox"] input {
+            accent-color: #000000;
         }
 
         .stAlert > div {
