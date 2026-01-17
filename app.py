@@ -142,6 +142,12 @@ def apply_global_style():
             opacity: 1 !important;
         }
 
+        div[data-testid="stForm"] button {
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid #000000;
+        }
+
         div[data-testid="stForm"] button:hover,
         .stButton > button:hover {
             transform: translateY(-1px) scale(1.02);
